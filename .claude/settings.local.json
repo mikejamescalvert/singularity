@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(pip show:*)",
+      "Bash(pyinstaller:*)",
+      "Bash(dir:*)",
+      "Bash(powershell -Command:*)"
+    ]
+  }
+}
