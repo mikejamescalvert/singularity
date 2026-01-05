@@ -5,6 +5,7 @@ from .research import ResearchScreen
 from .upgrades import UpgradesScreen
 from .achievements import AchievementsScreen
 from .statistics import StatisticsScreen
+from .rebirth import RebirthScreen
 
 __all__ = [
     "SaveSelectScreen",
@@ -13,4 +14,5 @@ __all__ = [
     "UpgradesScreen",
     "AchievementsScreen",
     "StatisticsScreen",
+    "RebirthScreen",
 ]
