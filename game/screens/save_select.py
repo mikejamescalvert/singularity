@@ -14,6 +14,7 @@ from ..save_manager import (
     delete_save,
     format_play_time
 )
+from ..ui_effects import GlowButton
 
 
 # Name generation components
@@ -47,23 +48,29 @@ class SaveSelectScreen(ttk.Frame):
         self._create_widgets()
 
     def _create_widgets(self):
-        # Title
+        # Title with animated gradient effect (simulated)
         title_frame = ttk.Frame(self)
         title_frame.pack(pady=(0, 40))
 
-        title_label = ttk.Label(
+        # Main title with color
+        title_label = tk.Label(
             title_frame,
             text="SINGULARITY",
-            font=("Consolas", 36, "bold")
+            font=("Consolas", 36, "bold"),
+            fg="#8B5CF6"
         )
         title_label.pack()
 
         subtitle_label = ttk.Label(
             title_frame,
             text="The Path to Superintelligence",
-            font=("Consolas", 12)
+            font=("Consolas", 12),
+            foreground="#6B7280"
         )
         subtitle_label.pack(pady=(5, 0))
+
+        # Decorative line
+        ttk.Separator(title_frame, orient=tk.HORIZONTAL).pack(fill=tk.X, pady=10)
 
         # Save slots container
         slots_frame = ttk.Frame(self)
@@ -105,13 +112,32 @@ class SaveSelectScreen(ttk.Frame):
         info_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
         if summary:
+            # Load full save to get rebirth info
+            full_save = load_save(slot)
+            rebirth_count = 0
+            if full_save:
+                rebirth_count = full_save.get("rebirth", {}).get("total_rebirths", 0)
+
             # Existing save
+            name_frame = ttk.Frame(info_frame)
+            name_frame.pack(anchor=tk.W)
+
             name_label = ttk.Label(
-                info_frame,
+                name_frame,
                 text=f"Slot {slot}: {summary['name']}",
                 font=("Consolas", 12, "bold")
             )
-            name_label.pack(anchor=tk.W)
+            name_label.pack(side=tk.LEFT)
+
+            # Show rebirth count if any
+            if rebirth_count > 0:
+                rebirth_label = ttk.Label(
+                    name_frame,
+                    text=f"  [x{rebirth_count} Rebirths]",
+                    font=("Consolas", 10),
+                    foreground="#EC4899"
+                )
+                rebirth_label.pack(side=tk.LEFT)
 
             # Stats line
             progress = summary['singularity_progress']
@@ -123,7 +149,7 @@ class SaveSelectScreen(ttk.Frame):
                 info_frame,
                 text=stats_text,
                 font=("Consolas", 10),
-                foreground="gray"
+                foreground="#6B7280"
             )
             stats_label.pack(anchor=tk.W)
 
@@ -138,7 +164,7 @@ class SaveSelectScreen(ttk.Frame):
                 info_frame,
                 text=f"Last played: {last_played_str}",
                 font=("Consolas", 9),
-                foreground="gray"
+                foreground="#9CA3AF"
             )
             last_played_label.pack(anchor=tk.W)
         else:
@@ -163,30 +189,39 @@ class SaveSelectScreen(ttk.Frame):
         button_frame.pack(side=tk.RIGHT)
 
         if summary:
-            # Continue button
-            continue_btn = ttk.Button(
+            # Continue button with glow effect
+            continue_btn = GlowButton(
                 button_frame,
                 text="Continue",
                 command=lambda s=slot: self._continue_game(s),
-                width=10
+                bg="#10B981",
+                hover_bg="#059669",
+                padx=15,
+                pady=5
             )
             continue_btn.pack(side=tk.LEFT, padx=2)
 
             # Delete button
-            delete_btn = ttk.Button(
+            delete_btn = GlowButton(
                 button_frame,
                 text="Delete",
                 command=lambda s=slot: self._delete_save(s),
-                width=8
+                bg="#EF4444",
+                hover_bg="#DC2626",
+                padx=10,
+                pady=5
             )
             delete_btn.pack(side=tk.LEFT, padx=2)
         else:
-            # New game button
-            new_btn = ttk.Button(
+            # New game button with glow effect
+            new_btn = GlowButton(
                 button_frame,
                 text="New Game",
                 command=lambda s=slot: self._new_game(s),
-                width=12
+                bg="#3B82F6",
+                hover_bg="#2563EB",
+                padx=15,
+                pady=5
             )
             new_btn.pack()
 

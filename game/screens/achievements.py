@@ -121,6 +121,37 @@ ACHIEVEMENTS = {
         "condition": lambda data: data.get("play_time_seconds", 0) >= 36000,
         "category": "time",
     },
+    # Rebirth milestones
+    "first_rebirth": {
+        "name": "Born Again",
+        "description": "Complete your first rebirth",
+        "condition": lambda data: data.get("rebirth", {}).get("total_rebirths", 0) >= 1,
+        "category": "rebirth",
+    },
+    "rebirth_5": {
+        "name": "Cycle of Life",
+        "description": "Complete 5 rebirths",
+        "condition": lambda data: data.get("rebirth", {}).get("total_rebirths", 0) >= 5,
+        "category": "rebirth",
+    },
+    "rebirth_10": {
+        "name": "Eternal Return",
+        "description": "Complete 10 rebirths",
+        "condition": lambda data: data.get("rebirth", {}).get("total_rebirths", 0) >= 10,
+        "category": "rebirth",
+    },
+    "rp_50": {
+        "name": "Accumulator",
+        "description": "Earn 50 total rebirth points",
+        "condition": lambda data: data.get("rebirth", {}).get("total_rp_earned", 0) >= 50,
+        "category": "rebirth",
+    },
+    "rp_200": {
+        "name": "Power Hoarder",
+        "description": "Earn 200 total rebirth points",
+        "condition": lambda data: data.get("rebirth", {}).get("total_rp_earned", 0) >= 200,
+        "category": "rebirth",
+    },
 }
 
 
@@ -200,7 +231,8 @@ class AchievementsScreen(tk.Toplevel):
             "research": "Research",
             "progress": "Progress",
             "intelligence": "Intelligence",
-            "time": "Time"
+            "time": "Time",
+            "rebirth": "Rebirth"
         }
 
         for cat_id, cat_name in categories.items():

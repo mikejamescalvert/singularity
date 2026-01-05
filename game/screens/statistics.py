@@ -60,6 +60,11 @@ class StatisticsScreen(tk.Toplevel):
         # Progression section
         self._create_section(main_frame, "Progression", self._get_progression_stats())
 
+        # Rebirth section
+        rebirth_stats = self._get_rebirth_stats()
+        if rebirth_stats:
+            self._create_section(main_frame, "Rebirth", rebirth_stats)
+
         # Close button
         ttk.Button(
             self,
@@ -175,6 +180,31 @@ class StatisticsScreen(tk.Toplevel):
         # Achievements
         achievements = self.save_data.get("achievements", [])
         stats.append(("Achievements Unlocked", f"{len(achievements)}/18"))
+
+        return stats
+
+    def _get_rebirth_stats(self) -> list:
+        """Get rebirth statistics."""
+        stats = []
+        rebirth_data = self.save_data.get("rebirth", {})
+
+        if not rebirth_data or rebirth_data.get("total_rebirths", 0) == 0:
+            return stats
+
+        stats.append(("Total Rebirths", rebirth_data.get("total_rebirths", 0)))
+        stats.append(("Lifetime RP Earned", rebirth_data.get("total_rp_earned", 0)))
+        stats.append(("Available RP", rebirth_data.get("current_rp", 0)))
+
+        # Count purchased bonuses
+        purchased = rebirth_data.get("purchased_bonuses", {})
+        total_bonus_levels = sum(purchased.values())
+        if total_bonus_levels > 0:
+            stats.append(("Bonus Levels Purchased", total_bonus_levels))
+
+        # Get rebirth title
+        from .rebirth import get_rebirth_title
+        title = get_rebirth_title(rebirth_data.get("total_rp_earned", 0))
+        stats.append(("Rebirth Rank", title))
 
         return stats
 
